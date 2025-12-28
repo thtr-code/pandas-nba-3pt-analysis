@@ -46,30 +46,33 @@ team_map = {
 
 player_df = player_df[~player_df['Team'].isin(['2TM', '3TM'])]
 player_df['Team'] = player_df['Team'].map(team_map)
+
+player_df['3PA_total'] = player_df['3PA'] * player_df['G'] / 82
+player_df['3P_total'] = (player_df['3P'] * player_df['G']) / 82
+
+
 merged_df = player_df.merge(team_df, how='left', on='Team')
 merged_df = merged_df.fillna(0)
 
-grouping = merged_df.groupby('Team').agg({
-    'W': 'mean',
-    'L': 'mean',
-    'NRtg': 'first',
-    '3P': 'sum',
-    '3PA': 'sum',
+final_df = merged_df.groupby('Team').agg({
+    '3P_total': 'sum',
+    '3PA_total': 'sum',
 })
+final_df = team_df[['Team','Rk', 'W', 'L', 'NRtg']].merge(final_df, how='left', on='Team')
 
-'''
-The following result is WRONG because we did not account for the fact that
-the csv displays seperate stats for players before and after they were traded. The 76'ers 
-for example have such a high 3PA because they have many trades, meaning old players
-and new players are contributing to the 3PA. 
-'''
-print(grouping[['W', 'L', '3P', '3PA']])
+final_df['3P_PCT'] = final_df['3P_total'] / final_df['3PA_total']
+
+final_df = final_df.sort_values('Rk', inplace=False, ascending=True)
+final_df = final_df.set_index('Rk')
+print(final_df)
 
 '''
 Playing around with diff funcs ignore 
 
 print(player_df[player_df['3P'] == player_df['3P'].max()].to_string())
 print(player_df.loc[player_df['3P'].idxmax(),'Player'])
+print(final_df[['W', 'L','NRtg','3P_total', '3PA_total', '3P_PCT']])
+
 '''
 
 
