@@ -7,9 +7,9 @@ Problem Definition: Is NBA (2024-2025) team success (wins/net rating) more stron
                     or 3-point efficiency
 '''
 
+player_df = pd.read_csv('player_data.csv')
+team_df = pd.read_csv('team_data.csv')
 
-df = pd.read_csv('player_data.csv')
-teamdf = pd.read_csv('team_data.csv')
 
 team_map = {
     'ATL': 'Atlanta Hawks',
@@ -44,17 +44,32 @@ team_map = {
     'WAS': 'Washington Wizards'
 }
 
+player_df = player_df[~player_df['Team'].isin(['2TM', '3TM'])]
+player_df['Team'] = player_df['Team'].map(team_map)
+merged_df = player_df.merge(team_df, how='left', on='Team')
+merged_df = merged_df.fillna(0)
 
-df = df[~df['Team'].isin(['2TM', '3TM'])]
-df = df.fillna(0)
-df['Team'] = df['Team'].map(team_map)
+grouping = merged_df.groupby('Team').agg({
+    'W': 'mean',
+    'L': 'mean',
+    'NRtg': 'first',
+    '3P': 'sum',
+    '3PA': 'sum',
+})
 
-df = df.drop(['Rk' , 'Player', 'Age',
-              'Pos', 'Player-additional', 'Awards',
-              'G', 'GS'], axis=1)
+'''
+The following result is WRONG because we did not account for the fact that
+the csv displays seperate stats for players before and after they were traded. The 76'ers 
+for example have such a high 3PA because they have many trades, meaning old players
+and new players are contributing to the 3PA. 
+'''
+print(grouping[['W', 'L', '3P', '3PA']])
 
-df = df.merge(teamdf, how='left', on='Team')
+'''
+Playing around with diff funcs ignore 
 
-print(df.to_string())
+print(player_df[player_df['3P'] == player_df['3P'].max()].to_string())
+print(player_df.loc[player_df['3P'].idxmax(),'Player'])
+'''
 
 
