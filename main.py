@@ -63,6 +63,16 @@ final_df['3P_PCT'] = final_df['3P_total'] / final_df['3PA_total']
 
 final_df = final_df.sort_values('Rk', inplace=False, ascending=True)
 final_df = final_df.set_index('Rk')
+
+corr_efficiency = final_df['3P_PCT'].corr(final_df['NRtg'])
+corr_volume = final_df['3PA_total'].corr(final_df['NRtg'])
+
+print("Correlation (3P% vs Net Rating):", corr_efficiency)
+print("Correlation (3PA vs Net Rating):", corr_volume)
+
+
+
+
 print(final_df) ## In hindsight, probably didn't need team win loss
 
 
@@ -73,11 +83,26 @@ figure, axes = plt.subplots(2,1)
 axes[0].scatter(final_df['3P_PCT'], final_df['NRtg'])
 axes[0].set_xlabel('3P%')
 axes[0].set_ylabel('Net Rating')
+x = final_df['3P_PCT']
+y = final_df['NRtg']
+
+m, b = np.polyfit(x, y, 1)
+axes[0].plot(x, m * x + b, linewidth = 1, color = 'black')
 
 ##3PA vs Net Rating
 axes[1].scatter(final_df['3PA_total'], final_df['NRtg'])
 axes[1].set_xlabel('3P Attempted')
 axes[1].set_ylabel('Net Rating')
+
+
+axes[0].text(0.315 , 12 , f'r:  {corr_efficiency}', color = 'red')
+axes[0].text(0.315 , 10 , 'Conclusion: Moderately Strong Correlation', color = 'red')
+
+
+
+axes[1].text(32,12, f'r: {corr_volume}', color = 'red')
+axes[1].text(32 , 10 , 'Conclusion: Weak Correlation ', color = 'red')
+
 
 
 for team, x, y in zip(final_df['Team'], final_df['3P_PCT'], final_df['NRtg']):
@@ -89,4 +114,9 @@ plt.show()
 
 
 
-
+'''
+Conclusion: During the 2024 - 2025 NBA season, a team's 3-point shooting percentage matters far more than
+how many 3's they are attempting (in terms of net rating). Boston appears as a high-volume outlier that succeeds
+despite not leading the league in efficiency, suggesting that extreme volume CAN PARTIALLY compensate for 
+non-elite efficieny, though this effect is not broadly consistent across teams
+'''
