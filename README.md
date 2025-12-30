@@ -24,8 +24,10 @@ Mid-season trades are explicitly handled to avoid double-counting player contrib
 ## Results
 - **3P% vs Net Rating:** r ≈ 0.67 (moderately strong correlation)
 - **3PA vs Net Rating:** r ≈ 0.14 (weak correlation)
+![3P% vs Net Rating](images/plotted_results.png)
 
-This indicates that **shooting efficiency** is a much stronger predictor of team success than shot volume alone.
+The plots show a moderately strong positive relationship between team three-point efficiency (3P%) and Net Rating,
+while three-point attempt volume (3PA) exhibits a much weaker association. This indicates that **shooting efficiency** is a much stronger predictor of team success than shot volume alone.
 
 ## Notable Observations
 - Boston serves as a high-volume outlier that performs well without elite efficiency
