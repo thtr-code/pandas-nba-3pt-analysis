@@ -118,5 +118,5 @@ plt.show()
 Conclusion: During the 2024 - 2025 NBA season, a team's 3-point shooting percentage matters far more than
 how many 3's they are attempting (in terms of net rating). Boston appears as a high-volume outlier that succeeds
 despite not leading the league in efficiency, suggesting that extreme volume CAN PARTIALLY compensate for 
-non-elite efficieny, though this effect is not broadly consistent across teams
+non-elite efficiency, though this effect is not broadly consistent across teams
 '''
