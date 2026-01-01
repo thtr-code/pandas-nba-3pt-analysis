@@ -1,12 +1,14 @@
 import matplotlib.pyplot as plt
 import pandas as pd
-from fontTools.merge.util import first
+import numpy as np
+import statsmodels.api as sm
 
-"""
+'''
 Problem Definition:
-Does three-point efficiency (3P%) remain strongly associated with Net Rating
-after accounting for defensive performance?
-"""
+Is three-point efficiency an independent driver of offensive strength 
+at the team level, beyond shot volume and defensive context?
+'''
+
 
 player_df = pd.read_csv('player_data.csv')
 team_df = pd.read_csv('team_data.csv')
@@ -55,7 +57,7 @@ merged_df['3P_total'] = (merged_df['G'] * merged_df['3P']) / 82
 
 
 final_df = merged_df.groupby('Team').agg({
-    'NRtg': 'first',
+    'ORtg': 'first',
     '3PA_total': 'sum',
     '3P_total': 'sum',
     'DRtg': 'first'
@@ -68,5 +70,22 @@ final_df = final_df.sort_values('Rk', inplace=False, ascending=True)
 final_df = final_df.set_index('Rk')
 
 
+## Regression and analysis starts here.
+x = final_df[['3P_PCT', '3PA_total', 'DRtg']]
+y = final_df['ORtg']
 
-print(final_df.to_string())
+x_std = (x - x.mean()) / x.std()
+x_std = sm.add_constant(x_std)
+
+result = sm.OLS(y, x_std).fit()
+print(result.summary())
+
+
+sm.graphics.plot_partregress_grid(result)
+plt.show()
+
+
+'''
+Conclusion: 
+
+'''
