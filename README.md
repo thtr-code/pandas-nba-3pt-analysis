@@ -98,6 +98,13 @@ All predictors were **z-score standardized** prior to estimation to improve inte
 - The model explains approximately **73% of the variance** in team offensive rating (R² ≈ 0.73)
 
 ---
+## Results
+- **3P% vs Net Rating:** r ≈ 0.67 (moderately strong correlation)
+- **3PA vs Net Rating:** r ≈ 0.14 (weak correlation)
+![3P% vs Net Rating](images/plotted_results.png)
+
+The plots show a moderately strong positive relationship between team three-point efficiency (3P%) and Net Rating,
+while three-point attempt volume (3PA) exhibits a much weaker association. This indicates that **shooting efficiency** is a much stronger predictor of team success than shot volume alone.
 
 ## Notable Observations
 - Boston appears as a **high-volume outlier**, performing well without elite three-point efficiency
