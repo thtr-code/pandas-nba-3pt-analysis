@@ -86,6 +86,8 @@ plt.show()
 
 
 '''
-Conclusion: 
+Conclusion: 3P% remains a strong, statistically significant predictor of offensive performance even when controlling 
+for defense. This is reinforced by the values we obtain from the table, β ≈ 2.89, p < 0.001
+
 
 '''
